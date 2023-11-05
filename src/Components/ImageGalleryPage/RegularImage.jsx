@@ -62,8 +62,11 @@ function RegularImage({imageDetails, index}) {
     // new
     
     let transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
+    if(draggingId === null){
+      transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
+    }
 
-    if(draggingId && dragOverId){
+    if((draggingId && dragOverId) && (draggingId !== dragOverId)){
       if(dragOverId <= id){
         if(targatedImage?.moveTo && moveTo){
           console.log("match", id)
