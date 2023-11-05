@@ -5,9 +5,6 @@ import FeatureImage from '../../Components/ImageGalleryPage/FeatureImage';
 import { deleteSelectImage } from '../../Redux/features/ImageGalleryPage/ImageGalleryPageSlice';
 import AddImage from '../../Components/ImageGalleryPage/AddImage';
 
-
-
-
 function ImageGallery(props) {
     const { images } = useSelector((state)=> state.ImageGalleryPage);
     const [totalSelected, setTotalSelected] = useState(0);
@@ -78,7 +75,7 @@ function ImageGallery(props) {
         <div className='container mt-5'>
             <div className='bg-white rounded-md'>
 
-                {title}
+                <div className='min-h-[65px] h-full flex items-center'>{title}</div>
                 
                 <hr/>
                 <div className='px-5 py-6'>
@@ -89,7 +86,7 @@ function ImageGallery(props) {
                             }
                             return <RegularImage key={index} imageDetails={imageItem} index={index} />
                         })}
-                        <AddImage/>
+                        {/* <AddImage/> */}
                     </div>
                 </div>
             </div>

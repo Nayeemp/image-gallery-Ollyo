@@ -39,22 +39,25 @@ function FeatureImage({imageDetails , index}) {
 
   const onDrop = (e) => {
       e.preventDefault();
-      const droppedImageIndex = e.dataTransfer.getData('imageIndex');
-      
+      const droppedImageIndex = e.dataTransfer.getData('imageIndex');      
       dispatch(reArrangeOnDrop({droppedOnImageIndex: index, droppedImageIndex}))
   };
+
+
+
+  
 
   
 
     return (
-        <div className='col-span-2 row-span-2 border-gray-300 border rounded-md relative cursor-pointer' 
+        <div className='col-span-2 row-span-2 border-gray-300 border rounded-md relative cursor-pointer image-transition' 
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
         onDrop={onDrop}
-        draggable="true"
+        draggable="true"        
         >            
             <div><img src={image} alt="" className='w-full h-full object-cover rounded-md'/></div>
 

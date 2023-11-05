@@ -18,59 +18,105 @@ const initialState = {
     {
         id : 1,
         isSelected : false,
-        image: image1
+        image: image1,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
     {
         id : 2,
         isSelected : false,
-        image: image2
+        image: image2,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
     {
         id : 3,
         isSelected : false,
-        image: image3
+        image: image3,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
     {
         id : 4,
         isSelected : false,
-        image: image4
+        image: image4,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
     {
         id : 5,
         isSelected : false,
-        image: image5
+        image: image5,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
     {
         id : 6,
         isSelected : false,
-        image: image6
+        image: image6,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
     {
         id : 7,
         isSelected : false,
-        image: image7
+        image: image7,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
     {
         id : 8,
         isSelected : false,
-        image: image8
+        image: image8,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
     {
         id : 9,
         isSelected : false,
-        image: image9
+        image: image9,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
     {
         id : 10,
         isSelected : false,
-        image: image10
+        image: image10,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
     {
         id : 11,
         isSelected : false,
-        image: image11
+        image: image11,
+        moveTo :{
+            Xaxis:0,
+            Yaxis:0
+        }
     },
-  ]
+  ],
+  draggingId: null,
+  dragOverId: null
 };
 
 // const initialState = {
@@ -99,6 +145,8 @@ export const ImageGalleryPageSlice = createSlice({
     },
 
     reArrangeOnDrop : (state, action) =>{
+        state.draggingId = null;
+        state.dragOverId = null;
         // console.log("droppedOnImageIndex", action.payload.droppedOnImageIndex);
         // console.log("droppedImageIndex", action.payload.droppedImageIndex);
 
@@ -117,10 +165,32 @@ export const ImageGalleryPageSlice = createSlice({
             // state.images =  arrayAfterDeleteOperation;          
             
         }
-    }
+    },
+
+    addDraggingImageId: (state, action) =>{
+        state.draggingId= action.payload;
+    },
+
+    addDragOverImageId: (state, action) =>{
+        state.dragOverId= action.payload;
+    },
+
+    clearDragDropIds:  (state, action) =>{
+        state.draggingId = null;
+        state.dragOverId = null;
+    }, 
+
+    addPosition:  (state, action) =>{
+        state.images = state.images.map((arrayItem)=>{
+            if(arrayItem.id === action.payload.id){
+                return {...arrayItem, moveTo:{...arrayItem.moveTo, Xaxis: action.payload.Xaxis, Yaxis: action.payload.Yaxis }}
+            }
+            return arrayItem;
+        })
+    }, 
 
   }
 });
 
 export default ImageGalleryPageSlice.reducer;
-export const { selectImage , deleteSelectImage , reArrangeOnDrop} = ImageGalleryPageSlice.actions;
+export const { selectImage , deleteSelectImage , reArrangeOnDrop, addDraggingImageId, addDragOverImageId, addPosition} = ImageGalleryPageSlice.actions;
