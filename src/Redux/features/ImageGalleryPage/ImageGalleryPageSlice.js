@@ -19,104 +19,147 @@ const initialState = {
         id : 1,
         isSelected : false,
         image: image1,
-        moveTo :{
-            Xaxis:0,
-            Yaxis:0
-        }
     },
     {
         id : 2,
         isSelected : false,
         image: image2,
-        moveTo :{
-            Xaxis:0,
-            Yaxis:0
-        }
     },
     {
         id : 3,
         isSelected : false,
         image: image3,
-        moveTo :{
-            Xaxis:0,
-            Yaxis:0
-        }
     },
     {
         id : 4,
         isSelected : false,
         image: image4,
-        moveTo :{
-            Xaxis:0,
-            Yaxis:0
-        }
     },
     {
         id : 5,
         isSelected : false,
         image: image5,
-        moveTo :{
-            Xaxis:0,
-            Yaxis:0
-        }
     },
     {
         id : 6,
         isSelected : false,
         image: image6,
-        moveTo :{
-            Xaxis:0,
-            Yaxis:0
-        }
     },
     {
         id : 7,
         isSelected : false,
         image: image7,
-        moveTo :{
-            Xaxis:0,
-            Yaxis:0
-        }
     },
     {
         id : 8,
         isSelected : false,
         image: image8,
-        moveTo :{
-            Xaxis:0,
-            Yaxis:0
-        }
     },
     {
         id : 9,
         isSelected : false,
         image: image9,
-        moveTo :{
-            Xaxis:0,
-            Yaxis:0
-        }
     },
     {
         id : 10,
         isSelected : false,
         image: image10,
-        moveTo :{
-            Xaxis:0,
-            Yaxis:0
-        }
     },
     {
         id : 11,
         isSelected : false,
         image: image11,
-        moveTo :{
+    },
+  ],
+  draggingIndex: null,
+  dragOverIndex: null,
+
+  tampleteForTransition : [
+    {
+        index : 0,        
+        position : {
             Xaxis:0,
             Yaxis:0
         }
     },
-  ],
-  draggingId: null,
-  dragOverId: null
+    {
+        index : 1,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+    {
+        index : 2,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+    {
+        index : 3,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+    {
+        index : 4,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+    {
+        index : 5,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+    {
+        index : 6,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+    {
+        index : 7,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+    {
+        index : 8,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+    {
+        index : 9,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+    {
+        index : 10,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+    {
+        index : 11,        
+        position : {
+            Xaxis:0,
+            Yaxis:0
+        }
+    },
+  ]
 };
 
 // const initialState = {
@@ -145,8 +188,8 @@ export const ImageGalleryPageSlice = createSlice({
     },
 
     reArrangeOnDrop : (state, action) =>{
-        state.draggingId = null;
-        state.dragOverId = null;
+        state.draggingIndex  = null;
+        state.draggingIndex = null;
         // console.log("droppedOnImageIndex", action.payload.droppedOnImageIndex);
         // console.log("droppedImageIndex", action.payload.droppedImageIndex);
 
@@ -167,23 +210,24 @@ export const ImageGalleryPageSlice = createSlice({
         }
     },
 
-    addDraggingImageId: (state, action) =>{
-        state.draggingId= action.payload;
+    addDraggingImageIndex: (state, action) =>{
+        state.draggingIndex= action.payload;
     },
 
-    addDragOverImageId: (state, action) =>{
-        state.dragOverId= action.payload;
+   addDragOverImageIndex: (state, action) =>{
+        state.dragOverIndex= action.payload;
     },
 
-    clearDragDropIds:  (state, action) =>{
-        state.draggingId = null;
-        state.dragOverId = null;
+    clearDragDropIndexs:  (state, action) =>{
+        state.draggingIndex = null;
+        state.dragOverIndex = null;
     }, 
 
-    addPosition:  (state, action) =>{
-        state.images = state.images.map((arrayItem)=>{
-            if(arrayItem.id === action.payload.id){
-                return {...arrayItem, moveTo:{...arrayItem.moveTo, Xaxis: action.payload.Xaxis, Yaxis: action.payload.Yaxis }}
+    addTampletePosition:  (state, action) =>{
+        // console.log("action.payload = ", action.payload  )
+        state.tampleteForTransition  = state.tampleteForTransition.map((arrayItem)=>{
+            if(arrayItem.index === action.payload.index){
+                return {...arrayItem, position:{...arrayItem.position, Xaxis: action.payload.Xaxis, Yaxis: action.payload.Yaxis }}
             }
             return arrayItem;
         })
@@ -193,4 +237,4 @@ export const ImageGalleryPageSlice = createSlice({
 });
 
 export default ImageGalleryPageSlice.reducer;
-export const { selectImage , deleteSelectImage , reArrangeOnDrop, addDraggingImageId, addDragOverImageId, addPosition} = ImageGalleryPageSlice.actions;
+export const { selectImage , deleteSelectImage , reArrangeOnDrop, addDraggingImageIndex, addDragOverImageIndex, addTampletePosition, clearDragDropIndexs} = ImageGalleryPageSlice.actions;

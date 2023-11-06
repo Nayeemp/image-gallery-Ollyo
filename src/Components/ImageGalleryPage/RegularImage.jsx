@@ -1,100 +1,18 @@
 /* eslint-disable array-callback-return */
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {  addDragOverImageId, addDraggingImageId, addPosition, reArrangeOnDrop, selectImage } from '../../Redux/features/ImageGalleryPage/ImageGalleryPageSlice';
+import {  addDragOverImageIndex, addDraggingImageIndex, addTampletePosition, clearDragDropIndexs, reArrangeOnDrop, selectImage } from '../../Redux/features/ImageGalleryPage/ImageGalleryPageSlice';
 
 function RegularImage({imageDetails, index}) {
     // eslint-disable-next-line no-unused-vars
-    const {id, isSelected, image, moveTo} = imageDetails;
+    const {id, isSelected, image } = imageDetails;
     
-    const { images } = useSelector((state)=> state.ImageGalleryPage);
-    let targatedImage =  images.find((imageItem)=> imageItem.id === (id + 1));
-    // console.log("targatedImage = ", targatedImage);   
-    
-    const { draggingId, dragOverId } = useSelector((state)=> state.ImageGalleryPage);
-
-
-    // let transitionStyle = `translate-x-0 translate-y-0`;
-    // if(draggingId && dragOverId){
-    //   console.log("match")
-    //   if(dragOverId <= id){
-    //     transitionStyle = `translate-x-[${moveTo.Xaxis}]translate-y-[${moveTo.Yaxis}] z-[2]`
-    //     transitionStyle = "translate-x-[200px] z-[2]"
-    //   }else{
-    //      transitionStyle = `translate-x-0 translate-y-0`;
-    //   }
-    // }else{
-    //    transitionStyle = `translate-x-0 translate-y-0`;
-    // }
-
-    // let transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
-
-    // if(draggingId && dragOverId){
-    //   if(dragOverId <= id){
-        
-    //   console.log("match", id)
-
-    //     transitionStyle = {transform: `translateX(200px)`, zIndex:"2"};
-    //   }else{
-    //      transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
-    //   }
-    // }else{
-    //    transitionStyle = {transform: 'translateX(0px) translateY(0px)'};;
-    // }
-
-///old
-
-    // let transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
-
-    // if(draggingId && dragOverId){
-    //   if(dragOverId <= id){
-        
-    //   console.log("match", id)
-
-    //     transitionStyle = {transform: `translateX(200px)`, zIndex:"2"};
-    //   }else{
-    //      transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
-    //   }
-    // }else{
-    //    transitionStyle = {transform: 'translateX(0px) translateY(0px)'};;
-    // }
-
-    // new
-    
-    let transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
-    if(draggingId === null){
-      transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
-    }
-
-    if((draggingId && dragOverId) && (draggingId !== dragOverId)){
-      if(dragOverId <= id){
-        if(targatedImage?.moveTo && moveTo){
-          console.log("match", id)
-          console.log(`${id} to ${index} = ${moveTo.Xaxis} to  ${targatedImage.moveTo.Xaxis }`)
-          console.log(`${id} to ${index} = ${moveTo.Yaxis} to  ${targatedImage.moveTo.Yaxis }`)
-    
-            // transitionStyle = {transform: `translateX(200px)`, zIndex:"2"};
-            if((targatedImage.moveTo.Xaxis - moveTo.Xaxis)>= 0){
-              transitionStyle = {transform: `translateX(${targatedImage.moveTo.Xaxis - moveTo.Xaxis}px)`};
-            }else{
-              transitionStyle = {transform: `translateX(${targatedImage.moveTo.Xaxis - moveTo.Xaxis}px) translateY(${targatedImage.moveTo.Yaxis - moveTo.Yaxis}px)`};
-            }
-        }
-
-      }else{
-         transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
-      }
-    }else{
-       transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
-    }
-
-
-    // console.log(transitionStyle)
+   
+    const { draggingIndex, dragOverIndex } = useSelector((state)=> state.ImageGalleryPage);
     
   const [isHovered, setIsHovered] = useState(false);  
   const [isDragging, setIsDragging] = useState(false);
 
-  // const [addTransition, setAddTransition] = useState("");
 
   const componentRef = useRef(null);
 
@@ -115,23 +33,19 @@ function RegularImage({imageDetails, index}) {
   const onDragStart = (e) => {
     e.dataTransfer.setData('imageIndex', index);    
     setIsDragging(true);
-    // console.log("Draging id = ",id);
-
-    if(!draggingId || (draggingId !== id)){
-      dispatch(addDraggingImageId(id));
-    }
-
+    dispatch(addDraggingImageIndex(index)); 
   };
 
   const onDragEnd = () => {
       setIsDragging(false);
+      dispatch(clearDragDropIndexs());
   };
 
   const onDragOver = (e) => {
     e.preventDefault(); // Allow the drop    
-    // console.log("DragOver id = ", id);
-    if(!dragOverId || (dragOverId !== id)){
-      dispatch(addDragOverImageId(id));
+    console.log("DragOver index = ", index);
+    if((dragOverIndex !== index) && (draggingIndex !== index) ){
+      dispatch(addDragOverImageIndex(index));
     }
     // setAddTransition("translate-x-[200px]");
 };
@@ -156,7 +70,7 @@ useEffect(() => {
           const { x, y } = componentRef.current.getBoundingClientRect();
           // console.log(`Component at X: ${x}, Y: ${y}`);
           
-          dispatch(addPosition({id: id, Xaxis:x, Yaxis:y}))
+          dispatch(addTampletePosition({index: index, Xaxis:x, Yaxis:y}));
           
       }
   };
@@ -171,6 +85,32 @@ useEffect(() => {
   };
 }, []);
 
+const { tampleteForTransition } = useSelector((state)=> state.ImageGalleryPage);
+
+const {position : ownPosition} = tampleteForTransition[index];
+
+const {position : targetPosition} = tampleteForTransition[index+1];
+
+// console.log("ownPosition = ", ownPosition)
+// console.log("targetPosition = ", targetPosition)
+
+let transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
+if(draggingIndex === null){
+  transitionStyle = {transform: 'translateX(0px) translateY(0px)'};
+}
+
+if((draggingIndex && dragOverIndex) && (draggingIndex !== dragOverIndex)){
+  if(dragOverIndex <= index){
+    if((targetPosition.Xaxis - ownPosition.Xaxis)> 0){
+      transitionStyle = {transform: `translateX(${targetPosition.Xaxis -ownPosition.Xaxis}px)`};
+    }else if(targetPosition.Xaxis !== 0){
+      transitionStyle = {transform: `translateX(${targetPosition.Xaxis -ownPosition.Xaxis}px) translateY(${targetPosition.Yaxis - ownPosition.Yaxis}px)`};
+    }
+  }
+}
+
+
+
 
 
     return (
@@ -183,8 +123,10 @@ useEffect(() => {
         onDrop={onDrop}
         draggable="true"        
         onDragLeave={onDragLeave}
+        ref={componentRef}
         >
-            <div className='border-gray-300 border rounded-md image-transition' style={transitionStyle} ref={componentRef}>
+            <div className='border-gray-300 border rounded-md image-transition' 
+              style={transitionStyle}>
             <div className='relative'>
               <img src={image} alt="" className={`w-full h-full object-cover rounded-md`}/> 
               </div>  
