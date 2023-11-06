@@ -5,58 +5,59 @@ import {  addDragOverImageIndex, addDraggingImageIndex, addTampletePosition, cle
 
 function FeatureImage({imageDetails , index}) {
     // eslint-disable-next-line no-unused-vars
-    const {id, isSelected, image} = imageDetails;
-
-       
+    const {id, isSelected, image } = imageDetails;
+    
+   
     const { draggingIndex, dragOverIndex } = useSelector((state)=> state.ImageGalleryPage);
+    
+  const [isHovered, setIsHovered] = useState(false);  
+  const [isDragging, setIsDragging] = useState(false);
 
-      
-    const [isHovered, setIsHovered] = useState(false);  
-    const [isDragging, setIsDragging] = useState(false);
 
-    const componentRef = useRef(null);
-    const dispatch = useDispatch();
+  const componentRef = useRef(null);
 
-    const handleMouseEnter = () => {
-      setIsHovered(true);
-    };
+  const dispatch = useDispatch();
 
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-    };
-
-    const onChangeHandler = (e)=>{
-      dispatch(selectImage({id:id,isSelected: e.target.checked }))
-    }
-
-    const onDragStart = (e) => {
-      e.dataTransfer.setData('imageIndex', index);    
-      setIsDragging(true);
-      dispatch(addDraggingImageIndex(index)); 
-    };
-  
-    const onDragEnd = () => {
-        setIsDragging(false);
-        dispatch(clearDragDropIndexs());
-    };
-
-    const onDragOver = (e) => {
-      e.preventDefault(); // Allow the drop    
-      console.log("DragOver index = ", index);
-      if((dragOverIndex !== index) && (draggingIndex !== index) ){
-        dispatch(addDragOverImageIndex(index));
-      }
-      // setAddTransition("translate-x-[200px]");
+  const handleMouseEnter = () => {
+    setIsHovered(true);
   };
 
-  const onDrop = (e) => {
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  const onChangeHandler = (e)=>{
+    dispatch(selectImage({id:id,isSelected: e.target.checked }))
+  }
+
+  const onDragStart = (e) => {
+    e.dataTransfer.setData('imageIndex', index);    
+    setIsDragging(true);
+    dispatch(addDraggingImageIndex(index)); 
+  };
+
+  const onDragEnd = () => {
+      setIsDragging(false);
+      dispatch(clearDragDropIndexs());
+  };
+
+  const onDragOver = (e) => {
+    e.preventDefault(); // Allow the drop    
+    // console.log("DragOver index = ", index);
+    if((dragOverIndex !== index) && (draggingIndex !== index) ){
+      dispatch(addDragOverImageIndex(index));
+    }
+    // setAddTransition("translate-x-[200px]");
+};
+
+const onDrop = (e) => {
     e.preventDefault();
     const droppedImageIndex = e.dataTransfer.getData('imageIndex');    
     dispatch(reArrangeOnDrop({droppedOnImageIndex: index, droppedImageIndex}));    
     // setAddTransition("translate-x-0");
 };
 
-  
+
 useEffect(() => {
   const updatePosition = () => {
       if (componentRef.current) {
@@ -70,13 +71,13 @@ useEffect(() => {
 
   // Call the updatePosition function on mount and screen resize
   updatePosition();
-  // window.addEventListener('resize', updatePosition);
+  window.addEventListener('resize', updatePosition);
 
   return () => {
       // Remove the event listener when the component unmounts
-      // window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('resize', updatePosition);
   };
-}, []);
+}, [draggingIndex]);
 
 const { tampleteForTransition } = useSelector((state)=> state.ImageGalleryPage);
 
@@ -101,7 +102,9 @@ if((draggingIndex && dragOverIndex) && (draggingIndex !== dragOverIndex)){
     }
   }
 }
-  
+
+
+
     return (
         <div className='col-span-2 row-span-2 border-gray-300 border rounded-md relative cursor-pointer' 
         onMouseEnter={handleMouseEnter}
@@ -113,7 +116,7 @@ if((draggingIndex && dragOverIndex) && (draggingIndex !== dragOverIndex)){
         draggable="true"
         ref={componentRef}         
         >            
-            <div className='col-span-2 row-span-2 border-gray-300 border rounded-md image-transition'  style={transitionStyle}>
+            <div className='col-span-2 row-span-2 border-gray-300 border rounded-md image-transition' style={transitionStyle}>
                <div className='relative'>
                     <img src={image} alt="" className='w-full h-full object-cover rounded-md'/>
               </div>

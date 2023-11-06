@@ -43,7 +43,7 @@ function RegularImage({imageDetails, index}) {
 
   const onDragOver = (e) => {
     e.preventDefault(); // Allow the drop    
-    console.log("DragOver index = ", index);
+    // console.log("DragOver index = ", index);
     if((dragOverIndex !== index) && (draggingIndex !== index) ){
       dispatch(addDragOverImageIndex(index));
     }
@@ -83,7 +83,7 @@ useEffect(() => {
       // Remove the event listener when the component unmounts
       window.removeEventListener('resize', updatePosition);
   };
-}, []);
+}, [draggingIndex]);
 
 const { tampleteForTransition } = useSelector((state)=> state.ImageGalleryPage);
 
